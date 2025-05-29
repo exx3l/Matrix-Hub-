@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Matrix Hub</title>
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Orbitron&family=Roboto&display=swap');
+
+  /* Reset */
+  * {
+    margin: 0; padding: 0; box-sizing: border-box;
+  }
+
+  body, html {
+    height: 100%;
+    font-family: 'Roboto', sans-serif;
+    background: #0a0f14;
+    color: #c0d6f9;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  /* Canvas fills whole background */
+  #rain-canvas {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: -10;
+  }
+
+  /* Container */
+  .container {
+    max-width: 900px;
+    margin: 70px auto 50px;
+    padding: 0 20px;
+    position: relative;
+    z-index: 1;
+  }
+
+  header {
+    display: flex;
+    justify-content: center;
+    padding: 20px 0;
+    border-bottom: 1px solid #1e2a3a;
+  }
+
+  header img {
+    width: 120px;
+    filter: drop-shadow(0 0 5px #4fc3f7);
+  }
+
+  h1 {
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 900;
+    font-size: 3rem;
+    color: #4fc3f7;
+    text-align: center;
+    margin-bottom: 40px;
+    text-shadow: 0 0 10px #4fc3f7;
+  }
+
+  section {
+    background: #12212f;
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(79, 195, 247, 0.2);
+    padding: 25px 30px;
+    margin-bottom: 40px;
+    transition: box-shadow 0.3s ease;
+  }
+
+  section:hover {
+    box-shadow: 0 12px 35px rgba(79, 195, 247, 0.5);
+  }
+
+  h2 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+    color: #4fc3f7;
+    letter-spacing: 1.2px;
+  }
+
+  ul {
+    list-style: none;
+  }
+
+  ul li {
+    padding-left: 1.3em;
+    position: relative;
+    margin-bottom: 12px;
+    font-size: 1.1rem;
+    cursor: default;
+  }
+
+  ul li::before {
+    content: '✔';
+    position: absolute;
+    left: 0;
+    color: #4fc3f7;
+    font-weight: bold;
+  }
+
+  p.price {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #80d8ff;
+    text-align: center;
+    margin-top: 10px;
+  }
+
+  ul.payment-list {
+    list-style: none;
+    padding-left: 0;
+    font-size: 1.1rem;
+  }
+
+  ul.payment-list li {
+    margin-bottom: 10px;
+    position: relative;
+    padding-left: 1.3em;
+  }
+
+  ul.payment-list li::before {
+    content: '💳';
+    position: absolute;
+    left: 0;
+  }
+
+  a {
+    color: #4fc3f7;
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+
+  a:hover {
+    color: #80d8ff;
+  }
+
+  /* Discord & Video link previews */
+
+  .link-preview {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+    padding: 10px;
+    border-radius: 10px;
+    background: #0f1926;
+    box-shadow: 0 3px 10px rgba(79, 195, 247, 0.15);
+    transition: background-color 0.25s ease;
+  }
+
+  .link-preview:hover {
+    background: #1a2a4d;
+  }
+
+  .link-preview img {
+    width: 140px;
+    border-radius: 8px;
+    box-shadow: 0 0 12px #4fc3f7;
+    flex-shrink: 0;
+  }
+
+  .link-preview div {
+    flex-grow: 1;
+  }
+
+  .link-preview h3 {
+    margin-bottom: 8px;
+    font-family: 'Orbitron', sans-serif;
+    color: #4fc3f7;
+    font-size: 1.3rem;
+  }
+
+  .link-preview p {
+    font-size: 1rem;
+    line-height: 1.3;
+    color: #a0b9db;
+  }
+
+  /* Footer */
+
+  footer {
+    text-align: center;
+    padding: 25px 10px;
+    font-size: 0.9rem;
+    color: #666;
+    border-top: 1px solid #1e2a3a;
+  }
+
+  /* Music player button */
+
+  #music-toggle {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    background: #4fc3f7;
+    border: none;
+    border-radius: 50%;
+    width: 56px;
+    height: 56px;
+    cursor: pointer;
+    box-shadow: 0 0 15px #4fc3f7;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background 0.3s ease;
+    z-index: 1000;
+  }
+
+  #music-toggle:hover {
+    background: #80d8ff;
+  }
+
+  #music-toggle svg {
+    fill: #0a0f14;
+    width: 28px;
+    height: 28px;
+  }
+
+  /* Responsive */
+
+  @media (max-width: 640px) {
+    .container {
+      margin: 40px 15px 40px;
+    }
+
+    .link-preview {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .link-preview img {
+      width: 100%;
+      margin-bottom: 10px;
+      box-shadow: none;
+    }
+  }
+</style>
+</head>
+<body>
+
+<canvas id="rain-canvas"></canvas>
+
+<header>
+  <img src="logo.png" alt="Matrix Hub Logo" />
+</header>
+
+<div class="container">
+
+  <h1>Matrix Hub</h1>
+
+  <section class="features">
+    <h2>⚙️ Features</h2>
+    <ul>
+      <li>Rapid Fire</li>
+      <li>High-Performance ESP</li>
+      <li>Low CPU Usage</li>
+      <li>Frequent Updates</li>
+      <li>Advanced Triggerbot (TB)</li>
+      <li>Powerful Camlock</li>
+      <li>Mouse Follow</li>
+      <li>Silent Aim</li>
+    </ul>
+  </section>
+
+  <section class="pricing">
+    <h2>💰 Price</h2>
+    <p class="price">Only <strong>$5</strong></p>
+  </section>
+
+  <section class="payment">
+    <h2>💳 Payment Methods</h2>
+    <ul class="payment-list">
+      <li>Visa / Mastercard (Instant Delivery)</li>
+      <li>TrueMoneyWallet / Prompt Pay (Thailand only)</li>
+    </ul>
+  </section>
+
+  <section class="discord">
+    <h2>📎 Join Our Discord</h2>
+    <p><a href="https://discord.gg/p5sFN7chur" target="_blank" rel="noopener noreferrer">https://discord.gg/p5sFN7chur</a></p>
+  </section>
+
+  <section class="discord">
+    <h2>🎥 Watch Videos</h2>
+
+    <div class="link-preview">
+      <a href="https://youtu.be/s3P4v_SUEL0" target="_blank" rel="noopener noreferrer" style="display:flex; align-items:center; gap:15px; text-decoration:none; color: inherit;">
+        <img src="https://img.youtube.com/vi/s3P4v_SUEL0/hqdefault.jpg" alt="Video 1 Thumbnail" />
+        <div>
+          <h3>Video 1</h3>
+          <p>Watch an amazing demo of Matrix Hub features.</p>
+        </div>
+      </a>
+    </div>
+
+    <div class="link-preview">
+      <a href="https://youtu.be/hEcJ2lpZOMw" target="_blank" rel="noopener noreferrer" style="display:flex; align-items:center; gap:15px; text-decoration:none; color: inherit;">
+        <img src="https://img.youtube.com/vi/hEcJ2lpZOMw/hqdefault.jpg" alt="Video 2 Thumbnail" />
+        <div>
+          <h3>Video 2</h3>
+          <p>See how Matrix Hub improves your gameplay effortlessly.</p>
+        </div>
+      </a>
+    </div>
+
+  </section>
+
+</div>
+
+<footer>
+  &copy; 2025 Matrix Hub. All rights reserved.
+</footer>
+
+<button id="music-toggle" aria-label="Toggle background music" title="Toggle music">
+  <!-- Start with play icon -->
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M8 5v14l11-7z"/>
+  </svg>
+</button>
+
+<audio id="background-music" loop preload="auto" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_3de3629e43.mp3?filename=calm-night-ambient-11017.mp3"></audio>
+
+<script>
+  // Music toggle button logic
+  const musicToggle = document.getElementById('music-toggle');
+  const music = document.getElementById('background-music');
+  const playIcon = '<path d="M8 5v14l11-7z"/>'; // Triangle
+  const pauseIcon = '<rect x="6" y="5" width="4" height="14"/><rect x="14" y="5" width="4" height="14"/>';
+
+  function updateButtonIcon(isPlaying) {
+    musicToggle.innerHTML = `<svg viewBox="0 0 24 24" aria-hidden="true">${isPlaying ? pauseIcon : playIcon}</svg>`;
+  }
+
+  musicToggle.addEventListener('click', () => {
+    if (music.paused) {
+      music.play();
+      updateButtonIcon(true);
+    } else {
+      music.pause();
+      updateButtonIcon(false);
+    }
+  });
+
+  // Initialize button icon
+  updateButtonIcon(false);
+
+  // Rain animation
+
+  const canvas = document.getElementById('rain-canvas');
+  const ctx = canvas.getContext('2d');
+
+  let width, height;
+
+  function resize() {
+    width = window.innerWidth;
+    height = window.innerHeight;
+    canvas.width = width;
+    canvas.height = height;
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  class Raindrop {
+    constructor() {
+      this.reset();
+    }
+
+    reset() {
+      this.x = Math.random() * width;
+      this.y = Math.random() * -height;
+      this.length = 10 + Math.random() * 20;
+      this.speed = 4 + Math.random() * 4;
+      this.opacity = 0.2 + Math.random() * 0.3;
+      this.width = 1 + Math.random() * 1;
+    }
+
+    fall() {
+      this.y += this.speed;
+      if (this.y > height) {
+        this.reset();
+      }
+    }
+
+    draw() {
+      ctx.strokeStyle = `rgba(79, 195, 247, ${this.opacity})`;
+      ctx.lineWidth = this.width;
+      ctx.beginPath();
+      ctx.moveTo(this.x, this.y);
+      ctx.lineTo(this.x, this.y + this.length);
+      ctx.stroke();
+    }
+  }
+
+  const raindrops = [];
+  const maxDrops = 300;
+
+  for (let i = 0; i < maxDrops; i++) {
+    raindrops.push(new Raindrop());
+  }
+
+  function animate() {
+    ctx.clearRect(0, 0, width, height);
+    for (const drop of raindrops) {
+      drop.fall();
+      drop.draw();
+    }
+    requestAnimationFrame(animate);
+  }
+  animate();
+
+</script>
+
+</body>
+</html>
