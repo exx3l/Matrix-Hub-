@@ -314,3 +314,107 @@
 </div>
 
 <footer>
+  &copy; 2025 Matrix Hub. All rights reserved.
+</footer>
+
+<button id="music-toggle" aria-label="Toggle background music" title="Toggle music">
+  <!-- Start with play icon -->
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M8 5v14l11-7z"/>
+  </svg>
+</button>
+
+<audio id="background-music" loop preload="auto" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_3de3629e43.mp3?filename=calm-night-ambient-11017.mp3"></audio>
+
+<script>
+  // Music toggle button logic
+  const musicToggle = document.getElementById('music-toggle');
+  const music = document.getElementById('background-music');
+  const playIcon = '<path d="M8 5v14l11-7z"/>'; // Triangle
+  const pauseIcon = '<rect x="6" y="5" width="4" height="14"/><rect x="14" y="5" width="4" height="14"/>';
+
+  function updateButtonIcon(isPlaying) {
+    musicToggle.innerHTML = `<svg viewBox="0 0 24 24" aria-hidden="true">${isPlaying ? pauseIcon : playIcon}</svg>`;
+  }
+
+  musicToggle.addEventListener('click', () => {
+    if (music.paused) {
+      music.play();
+      updateButtonIcon(true);
+    } else {
+      music.pause();
+      updateButtonIcon(false);
+    }
+  });
+
+  // Initialize button icon
+  updateButtonIcon(false);
+
+  // Rain animation
+
+  const canvas = document.getElementById('rain-canvas');
+  const ctx = canvas.getContext('2d');
+
+  let width, height;
+
+  function resize() {
+    width = window.innerWidth;
+    height = window.innerHeight;
+    canvas.width = width;
+    canvas.height = height;
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  class Raindrop {
+    constructor() {
+      this.reset();
+    }
+
+    reset() {
+      this.x = Math.random() * width;
+      this.y = Math.random() * -height;
+      this.length = 10 + Math.random() * 20;
+      this.speed = 4 + Math.random() * 4;
+      this.opacity = 0.2 + Math.random() * 0.3;
+      this.width = 1 + Math.random() * 1;
+    }
+
+    fall() {
+      this.y += this.speed;
+      if (this.y > height) {
+        this.reset();
+      }
+    }
+
+    draw() {
+      ctx.strokeStyle = `rgba(79, 195, 247, ${this.opacity})`;
+      ctx.lineWidth = this.width;
+      ctx.beginPath();
+      ctx.moveTo(this.x, this.y);
+      ctx.lineTo(this.x, this.y + this.length);
+      ctx.stroke();
+    }
+  }
+
+  const raindrops = [];
+  const maxDrops = 300;
+
+  for (let i = 0; i < maxDrops; i++) {
+    raindrops.push(new Raindrop());
+  }
+
+  function animate() {
+    ctx.clearRect(0, 0, width, height);
+    for (const drop of raindrops) {
+      drop.fall();
+      drop.draw();
+    }
+    requestAnimationFrame(animate);
+  }
+  animate();
+
+</script>
+
+</body>
+</html>
