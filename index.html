@@ -19,41 +19,17 @@
     background: #0a0f14;
     color: #c0d6f9;
     overflow-x: hidden;
+    position: relative;
   }
 
-  /* Animated rain background */
-  body::before {
-    content: '';
+  /* Canvas fills whole background */
+  #rain-canvas {
     position: fixed;
     top: 0; left: 0;
-    width: 100%; height: 100%;
+    width: 100vw;
+    height: 100vh;
     pointer-events: none;
-    background:
-      repeating-linear-gradient(
-        180deg,
-        rgba(79,195,247,0.15) 0,
-        rgba(79,195,247,0.15) 1px,
-        transparent 1px,
-        transparent 20px
-      ),
-      repeating-linear-gradient(
-        0deg,
-        rgba(79,195,247,0.1) 0,
-        rgba(79,195,247,0.1) 1px,
-        transparent 1px,
-        transparent 15px
-      );
-    animation: rainFall 5s linear infinite;
-    z-index: -2;
-  }
-
-  @keyframes rainFall {
-    0% {
-      background-position: 0 0, 0 0;
-    }
-    100% {
-      background-position: 0 20px, 0 15px;
-    }
+    z-index: -10;
   }
 
   /* Container */
@@ -61,6 +37,8 @@
     max-width: 900px;
     margin: 70px auto 50px;
     padding: 0 20px;
+    position: relative;
+    z-index: 1;
   }
 
   header {
@@ -266,6 +244,8 @@
 </head>
 <body>
 
+<canvas id="rain-canvas"></canvas>
+
 <header>
   <img src="logo.png" alt="Matrix Hub Logo" />
 </header>
@@ -324,7 +304,7 @@
         <img src="https://img.youtube.com/vi/hEcJ2lpZOMw/hqdefault.jpg" alt="Video 2 Thumbnail" />
         <div>
           <h3>Video 2</h3>
-          <p>Check out the latest update walkthrough.</p>
+          <p>See how Matrix Hub improves your gameplay effortlessly.</p>
         </div>
       </a>
     </div>
@@ -334,46 +314,3 @@
 </div>
 
 <footer>
-  &copy; 2025 Matrix Hub. All rights reserved.
-</footer>
-
-<!-- Background music -->
-<audio id="bg-music" loop>
-  <source src="https://cdn.pixabay.com/download/audio/2022/03/25/audio_47c85d63d3.mp3?filename=ambient-electronic-11088.mp3" type="audio/mpeg" />
-  Your browser does not support the audio element.
-</audio>
-
-<button id="music-toggle" aria-label="Toggle background music">
-  <svg viewBox="0 0 24 24" aria-hidden="true">
-    <path d="M3 9v6h4l5 5V4L7 9H3z"/>
-  </svg>
-</button>
-
-<script>
-  const music = document.getElementById('bg-music');
-  const btn = document.getElementById('music-toggle');
-  let playing = false;
-
-  btn.addEventListener('click', () => {
-    if(playing){
-      music.pause();
-      playing = false;
-      btn.innerHTML = `
-        <svg viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M3 9v6h4l5 5V4L7 9H3z"/>
-        </svg>
-      `;
-    } else {
-      music.play();
-      playing = true;
-      btn.innerHTML = `
-        <svg viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
-        </svg>
-      `;
-    }
-  });
-</script>
-
-</body>
-</html>
