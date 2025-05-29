@@ -1,140 +1,363 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Matrix Hub</title>
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #11171f;
-      color: #e4e4e4;
-    }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Matrix Hub</title>
 
-    header {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background-color: #0f141b;
-      padding: 20px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-    }
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Orbitron&family=Roboto&display=swap');
 
-    header img {
-      width: 100px;
-    }
+  /* Reset */
+  * {
+    margin: 0; padding: 0; box-sizing: border-box;
+  }
 
+  body, html {
+    height: 100%;
+    font-family: 'Roboto', sans-serif;
+    background: #0a0f14;
+    color: #c0d6f9;
+    overflow-x: hidden;
+  }
+
+  /* Animated rain background */
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    background:
+      repeating-linear-gradient(
+        180deg,
+        rgba(79,195,247,0.15) 0,
+        rgba(79,195,247,0.15) 1px,
+        transparent 1px,
+        transparent 20px
+      ),
+      repeating-linear-gradient(
+        0deg,
+        rgba(79,195,247,0.1) 0,
+        rgba(79,195,247,0.1) 1px,
+        transparent 1px,
+        transparent 15px
+      );
+    animation: rainFall 5s linear infinite;
+    z-index: -2;
+  }
+
+  @keyframes rainFall {
+    0% {
+      background-position: 0 0, 0 0;
+    }
+    100% {
+      background-position: 0 20px, 0 15px;
+    }
+  }
+
+  /* Container */
+  .container {
+    max-width: 900px;
+    margin: 70px auto 50px;
+    padding: 0 20px;
+  }
+
+  header {
+    display: flex;
+    justify-content: center;
+    padding: 20px 0;
+    border-bottom: 1px solid #1e2a3a;
+  }
+
+  header img {
+    width: 120px;
+    filter: drop-shadow(0 0 5px #4fc3f7);
+  }
+
+  h1 {
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 900;
+    font-size: 3rem;
+    color: #4fc3f7;
+    text-align: center;
+    margin-bottom: 40px;
+    text-shadow: 0 0 10px #4fc3f7;
+  }
+
+  section {
+    background: #12212f;
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(79, 195, 247, 0.2);
+    padding: 25px 30px;
+    margin-bottom: 40px;
+    transition: box-shadow 0.3s ease;
+  }
+
+  section:hover {
+    box-shadow: 0 12px 35px rgba(79, 195, 247, 0.5);
+  }
+
+  h2 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+    color: #4fc3f7;
+    letter-spacing: 1.2px;
+  }
+
+  ul {
+    list-style: none;
+  }
+
+  ul li {
+    padding-left: 1.3em;
+    position: relative;
+    margin-bottom: 12px;
+    font-size: 1.1rem;
+    cursor: default;
+  }
+
+  ul li::before {
+    content: '✔';
+    position: absolute;
+    left: 0;
+    color: #4fc3f7;
+    font-weight: bold;
+  }
+
+  p.price {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #80d8ff;
+    text-align: center;
+    margin-top: 10px;
+  }
+
+  ul.payment-list {
+    list-style: none;
+    padding-left: 0;
+    font-size: 1.1rem;
+  }
+
+  ul.payment-list li {
+    margin-bottom: 10px;
+    position: relative;
+    padding-left: 1.3em;
+  }
+
+  ul.payment-list li::before {
+    content: '💳';
+    position: absolute;
+    left: 0;
+  }
+
+  a {
+    color: #4fc3f7;
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+
+  a:hover {
+    color: #80d8ff;
+  }
+
+  /* Discord & Video link previews */
+
+  .link-preview {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+    padding: 10px;
+    border-radius: 10px;
+    background: #0f1926;
+    box-shadow: 0 3px 10px rgba(79, 195, 247, 0.15);
+    transition: background-color 0.25s ease;
+  }
+
+  .link-preview:hover {
+    background: #1a2a4d;
+  }
+
+  .link-preview img {
+    width: 140px;
+    border-radius: 8px;
+    box-shadow: 0 0 12px #4fc3f7;
+    flex-shrink: 0;
+  }
+
+  .link-preview div {
+    flex-grow: 1;
+  }
+
+  .link-preview h3 {
+    margin-bottom: 8px;
+    font-family: 'Orbitron', sans-serif;
+    color: #4fc3f7;
+    font-size: 1.3rem;
+  }
+
+  .link-preview p {
+    font-size: 1rem;
+    line-height: 1.3;
+    color: #a0b9db;
+  }
+
+  /* Footer */
+
+  footer {
+    text-align: center;
+    padding: 25px 10px;
+    font-size: 0.9rem;
+    color: #666;
+    border-top: 1px solid #1e2a3a;
+  }
+
+  /* Music player button */
+
+  #music-toggle {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    background: #4fc3f7;
+    border: none;
+    border-radius: 50%;
+    width: 56px;
+    height: 56px;
+    cursor: pointer;
+    box-shadow: 0 0 15px #4fc3f7;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background 0.3s ease;
+    z-index: 1000;
+  }
+
+  #music-toggle:hover {
+    background: #80d8ff;
+  }
+
+  #music-toggle svg {
+    fill: #0a0f14;
+    width: 28px;
+    height: 28px;
+  }
+
+  /* Responsive */
+
+  @media (max-width: 640px) {
     .container {
-      max-width: 900px;
-      margin: 40px auto;
-      padding: 0 20px;
+      margin: 40px 15px 40px;
     }
 
-    h1 {
-      text-align: center;
-      color: #4fc3f7;
+    .link-preview {
+      flex-direction: column;
+      align-items: flex-start;
     }
 
-    .features, .pricing, .payment, .discord {
-      background-color: #1c252f;
-      padding: 20px;
-      border-radius: 10px;
-      margin-bottom: 30px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-    }
-
-    h2 {
-      color: #4fc3f7;
+    .link-preview img {
+      width: 100%;
       margin-bottom: 10px;
+      box-shadow: none;
     }
-
-    ul {
-      list-style: none;
-      padding: 0;
-    }
-
-    ul li::before {
-      content: "✓ ";
-      color: #4fc3f7;
-    }
-
-    a {
-      color: #4fc3f7;
-      text-decoration: none;
-    }
-
-    .footer {
-      text-align: center;
-      padding: 20px;
-      font-size: 0.9em;
-      color: #888;
-    }
-
-  </style>
+  }
+</style>
 </head>
 <body>
 
 <header>
-  <img src="logo.png" alt="logo.png" />
+  <img src="logo.png" alt="Matrix Hub Logo" />
 </header>
-  <div class="container">
-    <h1>Matrix Hub</h1>
 
-    <div class="features">
-      <h2>⚙️ Features</h2>
-      <ul>
-        <li>Rapid Fire</li>
-        <li>High-Performance ESP</li>
-        <li>Low CPU Usage</li>
-        <li>Frequent Updates</li>
-        <li>Advanced Triggerbot (TB)</li>
-        <li>Powerful Camlock</li>
-        <li>Mouse Follow</li>
-        <li>Silent Aim</li>
-      </ul>
+<div class="container">
+
+  <h1>Matrix Hub</h1>
+
+  <section class="features">
+    <h2>⚙️ Features</h2>
+    <ul>
+      <li>Rapid Fire</li>
+      <li>High-Performance ESP</li>
+      <li>Low CPU Usage</li>
+      <li>Frequent Updates</li>
+      <li>Advanced Triggerbot (TB)</li>
+      <li>Powerful Camlock</li>
+      <li>Mouse Follow</li>
+      <li>Silent Aim</li>
+    </ul>
+  </section>
+
+  <section class="pricing">
+    <h2>💰 Price</h2>
+    <p class="price">Only <strong>$5</strong></p>
+  </section>
+
+  <section class="payment">
+    <h2>💳 Payment Methods</h2>
+    <ul class="payment-list">
+      <li>Visa / Mastercard (Instant Delivery)</li>
+      <li>TrueMoneyWallet / Prompt Pay (Thailand only)</li>
+    </ul>
+  </section>
+
+  <section class="discord">
+    <h2>📎 Join Our Discord</h2>
+    <p><a href="https://discord.gg/p5sFN7chur" target="_blank" rel="noopener noreferrer">https://discord.gg/p5sFN7chur</a></p>
+  </section>
+
+  <section class="discord">
+    <h2>🎥 Watch Videos</h2>
+
+    <div class="link-preview">
+      <a href="https://youtu.be/s3P4v_SUEL0" target="_blank" rel="noopener noreferrer" style="display:flex; align-items:center; gap:15px; text-decoration:none; color: inherit;">
+        <img src="https://img.youtube.com/vi/s3P4v_SUEL0/hqdefault.jpg" alt="Video 1 Thumbnail" />
+        <div>
+          <h3>Video 1</h3>
+          <p>Watch an amazing demo of Matrix Hub features.</p>
+        </div>
+      </a>
     </div>
 
-    <div class="pricing">
-      <h2>💰 Price</h2>
-      <p>Only <strong>$5</strong></p>
+    <div class="link-preview">
+      <a href="https://youtu.be/hEcJ2lpZOMw" target="_blank" rel="noopener noreferrer" style="display:flex; align-items:center; gap:15px; text-decoration:none; color: inherit;">
+        <img src="https://img.youtube.com/vi/hEcJ2lpZOMw/hqdefault.jpg" alt="Video 2 Thumbnail" />
+        <div>
+          <h3>Video 2</h3>
+          <p>Check out the latest update walkthrough.</p>
+        </div>
+      </a>
     </div>
 
-    <div class="payment">
-      <h2>💳 Payment Methods</h2>
-      <ul>
-        <li>Visa / Mastercard (Instant Delivery)</li>
-        <li>TrueMoneyWallet / Prompt Pay (Thailand only)</li>
-      </ul>
-    </div>
+  </section>
 
-    <div class="discord">
-      <h2>📎 Join Our Discord</h2>
-      <p><a href="https://discord.gg/p5sFN7chur" target="_blank">https://discord.gg/p5sFN7chur</a></p>
-    </div>
-
-   <div class="discord">
-  <h2>🎥 Watch Videos</h2>
-  
-  <div class="link-preview">
-    <a href="https://youtu.be/s3P4v_SUEL0" target="_blank" style="display: flex; align-items: center; gap: 10px; text-decoration: none; color: #4fc3f7;">
-      <img src="https://img.youtube.com/vi/s3P4v_SUEL0/hqdefault.jpg" alt="Video 1 Thumbnail" style="width: 120px; border-radius: 8px;" />
-      <div>
-        <h3 style="margin: 0;">Video 1</h3>
-        <p style="margin: 5px 0 0;">[NEW] Raiding the Whole DAHOOD server with Matrix Hub</p>
-      </div>
-    </a>
-  </div>
-
-  <div class="link-preview" style="margin-top: 15px;">
-    <a href="https://youtu.be/hEcJ2lpZOMw" target="_blank" style="display: flex; align-items: center; gap: 10px; text-decoration: none; color: #4fc3f7;">
-      <img src="https://img.youtube.com/vi/hEcJ2lpZOMw/hqdefault.jpg" alt="Video 2 Thumbnail" style="width: 120px; border-radius: 8px;" />
-      <div>
-        <h3 style="margin: 0;">Video 2</h3>
-        <p style="margin: 5px 0 0;">Raiding in Dahood for 17 Minutes With Matrix Hub (EXTERNAL)</p>
-      </div>
-    </a>
-  </div>
-  
 </div>
+
+<footer>
+  &copy; 2025 Matrix Hub. All rights reserved.
+</footer>
+
+<!-- Background music -->
+<audio id="bg-music" loop>
+  <source src="https://cdn.pixabay.com/download/audio/2022/03/25/audio_47c85d63d3.mp3?filename=ambient-electronic-11088.mp3" type="audio/mpeg" />
+  Your browser does not support the audio element.
+</audio>
+
+<button id="music-toggle" aria-label="Toggle background music">
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M3 9v6h4l5 5V4L7 9H3z"/>
+  </svg>
+</button>
+
+<script>
+  const music = document.getElementById('bg-music');
+  const btn = document.getElementById('music-toggle');
+  let playing = false;
+
+  btn.addEventListener('click', () => {
+    if(playing){
+      music.pause();
+      playing = false;
+      btn.innerHTML = `
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M3 9v6h4l
