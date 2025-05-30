@@ -1,280 +1,53 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Matrix Hub</title>
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500&family=Roboto&display=swap');
+<div id="how-it-works" class="py-12 sm:py-20 lg:py-28 bg-[#0d0d0d] text-white">
+  <div class="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
+    <div class="max-w-2xl mx-auto text-center">
+      <h2 class="text-4xl font-extrabold sm:text-5xl lg:text-6xl drop-shadow text-white">
+        How does it work?
+      </h2>
+      <p class="mt-4 max-w-md mx-auto text-lg text-gray-400">
+        Shopping made simple in three easy steps!
+      </p>
+    </div>
 
-  /* Reset */
-  * {
-    box-sizing: border-box;
-  }
-  body, html {
-    margin: 0; padding: 0; height: 100%;
-    font-family: 'Roboto', sans-serif;
-    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-    color: #c0d6f9;
-    overflow-x: hidden;
-  }
+    <div class="relative mt-16 lg:mt-24">
+      <div class="absolute inset-x-0 hidden md:block top-2 px-8 xl:px-44 pointer-events-none opacity-60">
+        <img src="https://cdn.rareblocks.xyz/collection/celebration/images/steps/2/curved-dotted-line.svg" alt="flow-line" class="w-full" />
+      </div>
 
-  /* Header */
-  header {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #0f141b;
-    padding: 20px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
-    gap: 15px;
-  }
-  header img {
-    width: 120px;
-    height: auto;
-    user-select: none;
-  }
-  header h1 {
-    font-family: 'Orbitron', sans-serif;
-    font-weight: 500;
-    font-size: 2.8rem;
-    color: #4fc3f7;
-    margin: 0;
-    text-shadow: 0 0 8px #4fc3f7;
-  }
+      <div class="relative grid grid-cols-1 md:grid-cols-3 gap-y-16 md:gap-x-12 text-center">
+        <!-- Step 1 -->
+        <div class="transition hover:-translate-y-2 duration-300">
+          <div class="flex items-center justify-center w-16 h-16 mx-auto rounded-full border-2 border-[#6366f1] bg-[#6366f1] shadow-lg shadow-indigo-500/30">
+            <span class="text-xl font-bold text-white">1</span>
+          </div>
+          <h3 class="mt-6 text-xl font-semibold text-white">Select a product</h3>
+          <p class="mt-4 text-base text-gray-400 px-4">
+            Choose from a wide range of items designed to suit your style and needs. Just tap to explore and add to cart.
+          </p>
+        </div>
 
-  /* Particle background container */
-  #particles {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100vw;
-    height: 100vh;
-    pointer-events: none;
-    z-index: 0;
-  }
+        <!-- Step 2 -->
+        <div class="transition hover:-translate-y-2 duration-300">
+          <div class="flex items-center justify-center w-16 h-16 mx-auto rounded-full border-2 border-[#6366f1] bg-[#6366f1] shadow-lg shadow-indigo-500/30">
+            <span class="text-xl font-bold text-white">2</span>
+          </div>
+          <h3 class="mt-6 text-xl font-semibold text-white">Pay the invoice</h3>
+          <p class="mt-4 text-base text-gray-400 px-4">
+            Securely complete your payment using your preferred method. Fast, safe, and hassle-free.
+          </p>
+        </div>
 
-  /* Content container */
-  .container {
-    position: relative;
-    max-width: 900px;
-    margin: 80px auto 40px;
-    padding: 20px 30px;
-    background: rgba(15, 20, 27, 0.85);
-    border-radius: 12px;
-    box-shadow: 0 0 40px rgba(79, 195, 247, 0.5);
-    z-index: 1;
-    animation: fadeIn 1.2s ease forwards;
-  }
-
-  /* Headings */
-  h2 {
-    font-family: 'Orbitron', sans-serif;
-    font-weight: 500;
-    font-size: 1.8rem;
-    margin-bottom: 15px;
-    color: #6dd1ff;
-    text-shadow: 0 0 5px #6dd1ff;
-    border-bottom: 2px solid #4fc3f7;
-    padding-bottom: 6px;
-  }
-
-  ul {
-    list-style: none;
-    padding-left: 0;
-  }
-  ul li {
-    margin-bottom: 10px;
-    font-size: 1.1rem;
-    position: relative;
-    padding-left: 28px;
-    transition: color 0.3s ease;
-    cursor: default;
-  }
-  ul li::before {
-    content: '✓';
-    position: absolute;
-    left: 0;
-    color: #4fc3f7;
-    font-weight: bold;
-  }
-  ul li:hover {
-    color: #82d4ff;
-  }
-
-  /* Links */
-  a {
-    color: #4fc3f7;
-    text-decoration: none;
-    font-weight: 600;
-    transition: color 0.3s ease;
-  }
-  a:hover {
-    color: #82d4ff;
-    text-decoration: underline;
-  }
-
-  /* Video list - thumbnails and text inline */
-  .videos ul li {
-    padding-left: 0;
-    cursor: pointer;
-  }
-  .videos ul li a {
-    display: flex;
-    align-items: center;
-  }
-  .videos ul li img {
-    width: 160px;
-    height: 90px;
-    border-radius: 6px;
-    box-shadow: 0 0 8px #4fc3f7;
-    flex-shrink: 0;
-  }
-  .videos ul li span {
-    margin-left: 12px;
-    color: #4fc3f7;
-    font-size: 1.15rem;
-    font-weight: 600;
-  }
-
-  /* Footer */
-  .footer {
-    text-align: center;
-    padding: 20px 0;
-    font-size: 0.9rem;
-    color: #888;
-    border-top: 1px solid rgba(79,195,247,0.2);
-  }
-
-  /* Animations */
-  @keyframes fadeIn {
-    from {opacity: 0; transform: translateY(10px);}
-    to {opacity: 1; transform: translateY(0);}
-  }
-</style>
-</head>
-<body>
-
-<header>
-  <img src="logo.png" alt="Matrix Hub Logo" />
-  <h1>Matrix Hub</h1>
-</header>
-
-<div id="particles"></div>
-
-<div class="container" role="main" aria-label="Matrix Hub main content">
-
-  <section class="features" aria-label="Features of Matrix Hub">
-    <h2>⚙️ Features</h2>
-    <ul>
-      <li>Rapid Fire</li>
-      <li>High-Performance ESP</li>
-      <li>Low CPU Usage</li>
-      <li>Frequent Updates</li>
-      <li>Advanced Triggerbot (TB)</li>
-      <li>Powerful Camlock</li>
-      <li>Mouse Follow</li>
-      <li>Silent Aim</li>
-    </ul>
-  </section>
-
-  <section class="pricing" aria-label="Pricing details">
-    <h2>💰 Price</h2>
-    <p>Only <strong>$5</strong></p>
-  </section>
-
-  <section class="payment" aria-label="Payment methods">
-    <h2>💳 Payment Methods</h2>
-    <ul>
-      <li>Visa / Mastercard (Instant Delivery)</li>
-      <li>TrueMoneyWallet / Prompt Pay (Thailand only)</li>
-    </ul>
-  </section>
-
-  <section class="discord" aria-label="Discord community invite">
-    <h2>📎 Join Our Discord</h2>
-    <p><a href="https://discord.gg/p5sFN7chur" target="_blank" rel="noopener noreferrer">https://discord.gg/p5sFN7chur</a></p>
-  </section>
-
-  <section class="videos" aria-label="Video demonstrations">
-    <h2>🎥 Watch Videos</h2>
-    <ul>
-      <li>
-        <a href="https://youtu.be/s3P4v_SUEL0" target="_blank" rel="noopener noreferrer">
-          <img src="https://img.youtube.com/vi/s3P4v_SUEL0/hqdefault.jpg" alt="Video 1 thumbnail" />
-          <span>Video 1</span>
-        </a>
-      </li>
-      <li>
-        <a href="https://youtu.be/hEcJ2lpZOMw" target="_blank" rel="noopener noreferrer">
-          <img src="https://img.youtube.com/vi/hEcJ2lpZOMw/hqdefault.jpg" alt="Video 2 thumbnail" />
-          <span>Video 2</span>
-        </a>
-      </li>
-    </ul>
-  </section>
+        <!-- Step 3 -->
+        <div class="transition hover:-translate-y-2 duration-300">
+          <div class="flex items-center justify-center w-16 h-16 mx-auto rounded-full border-2 border-[#6366f1] bg-[#6366f1] shadow-lg shadow-indigo-500/30">
+            <span class="text-xl font-bold text-white">3</span>
+          </div>
+          <h3 class="mt-6 text-xl font-semibold text-white">Receive product</h3>
+          <p class="mt-4 text-base text-gray-400 px-4">
+            Sit back and relax while we deliver your item. Track your order and enjoy fast shipping.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
-
-<footer class="footer" role="contentinfo">
-  &copy; 2025 Matrix Hub. All rights reserved.
-</footer>
-
-<script>
-  // Simple particles effect for background
-  const canvas = document.createElement('canvas');
-  const particlesDiv = document.getElementById('particles');
-  particlesDiv.appendChild(canvas);
-  const ctx = canvas.getContext('2d');
-
-  let w, h;
-  function resize() {
-    w = window.innerWidth;
-    h = window.innerHeight;
-    canvas.width = w;
-    canvas.height = h;
-  }
-  window.addEventListener('resize', resize);
-  resize();
-
-  class Particle {
-    constructor() {
-      this.x = Math.random() * w;
-      this.y = Math.random() * h;
-      this.radius = Math.random() * 1.2 + 0.5;
-      this.speedX = (Math.random() - 0.5) * 0.2;
-      this.speedY = (Math.random() - 0.5) * 0.2;
-      this.alpha = Math.random() * 0.3 + 0.2;
-    }
-    update() {
-      this.x += this.speedX;
-      this.y += this.speedY;
-      if (this.x < 0) this.x = w;
-      else if (this.x > w) this.x = 0;
-      if (this.y < 0) this.y = h;
-      else if (this.y > h) this.y = 0;
-    }
-    draw() {
-      ctx.beginPath();
-      ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(79, 195, 247, ${this.alpha})`;
-      ctx.fill();
-    }
-  }
-
-  const particles = [];
-  for(let i=0; i < 120; i++) {
-    particles.push(new Particle());
-  }
-
-  function animate() {
-    ctx.clearRect(0,0,w,h);
-    particles.forEach(p => {
-      p.update();
-      p.draw();
-    });
-    requestAnimationFrame(animate);
-  }
-  animate();
-</script>
-
-</body>
-</html>
